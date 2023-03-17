@@ -15,13 +15,15 @@ axios(url)
 		const $ = cheerio.load(html);
 		const items = [];
 		$('.ProductItem__Wrapper, yotpo', html).each(function () {
-			const image = $(this).find('.yotpo').attr('data-url');
+			const imageUrl = $(this).find('.yotpo').attr('data-image-url');
+			const formattedUrl = imageUrl.substring(2, imageUrl.indexOf('.jpg') + 4);
+
 			const title = $(this).find('.yotpo').attr('data-name');
 			const price = $(this).find('.ProductItem__Price').text().trim();
 			items.push({
 				title,
 				price,
-				image,
+				image: formattedUrl,
 			});
 		});
 		console.log(items);
@@ -29,5 +31,3 @@ axios(url)
 	.catch((err) => console.log(err));
 
 app.listen(PORT, () => console.log('aye aye captain'));
-
-// a.find('.container_c89a5').find('img').attr('src');
