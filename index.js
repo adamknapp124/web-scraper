@@ -5,7 +5,7 @@ const axios = require('axios');
 const PORT = 4000;
 
 // change this url to scrape something else in the future
-const url = 'https://imageskincare.com/collections/all-skincare';
+const url = 'https://imageskincare.com/collections/hand-body-care';
 
 const app = express();
 
@@ -15,15 +15,16 @@ axios(url)
 		const $ = cheerio.load(html);
 		const items = [];
 		$('.ProductItem__Wrapper, yotpo', html).each(function () {
-			const imageUrl = $(this).find('.yotpo').attr('data-image-url');
-			const formattedUrl = imageUrl.substring(2, imageUrl.indexOf('.jpg') + 4);
+			const imgUrl = $(this).find('.yotpo').attr('data-image-url');
+			const formattedUrl = imgUrl.substring(2, imgUrl.indexOf('.jpg') + 4);
 
-			const title = $(this).find('.yotpo').attr('data-name');
+			const name = $(this).find('.yotpo').attr('data-name');
 			const price = $(this).find('.ProductItem__Price').text().trim();
 			items.push({
-				title,
-				price,
-				image: formattedUrl,
+				category: 'hand and body skincare',
+				name,
+				price: parseFloat(price.replace('$', '')),
+				imgUrl: `https://${formattedUrl}`,
 			});
 		});
 		console.log(items);
